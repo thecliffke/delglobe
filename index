@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delglobe Consultants Limited | Spatial Intelligence</title>
+    
+    <!-- Chosen Palette: Warm Neutrals (bg-gray-50, text-gray-800) with Teal & Soft Gold accents (text-teal-700, bg-teal-600, bg-yellow-100) -->
+    <!-- Application Structure Plan: A single-page layout with a sticky navigation bar (Home, Services, Our Approach, Our Work, Contact) provides the most intuitive user flow for a company profile, allowing non-linear exploration. The key interaction is the 'Services' section, which uses a tabbed interface to manage the high density of service information, preventing user overwhelm. 'Our Work' features a Chart.js visualization of client distribution (the only quantitative data) linked to an interactive, filterable project list, providing concrete proof of their expertise. -->
+    <!-- Visualization & Content Choices: [Services: Report info (long list of services) -> Goal (Organize/Inform) -> Method (Tabbed interface) -> Interaction (Click tabs to show/hide detailed service lists) -> Justification (Manages high info density, interactive) -> Library (JS). Values: Report info (Core values list) -> Goal (Inform) -> Method (Card grid with Unicode icons) -> Interaction (Static, visual) -> Justification (Scannable, engaging) -> Library (HTML/Tailwind). Projects: Report info (Sample works table) -> Goal (Inform/Compare) -> Method (Chart.js Donut Chart + Filterable List) -> Interaction (Chart hover + JS filter buttons for list) -> Justification (Visualizes client distribution, adds interactivity to proof) -> Library (Chart.js, JS). ] -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+      body { 
+        font-family: 'Inter', sans-serif; 
+        background-color: #f9fafb;
+        color: #1f2937;
+      }
+      .chart-container {
+        position: relative;
+        width: 100%;
+        max-width: 420px;
+        margin-left: auto;
+        margin-right: auto;
+        height: 300px;
+        max-height: 350px;
+      }
+      @media (min-width: 768px) {
+        .chart-container { 
+            height: 350px; 
+        }
+      }
+      .nav-link.active {
+        color: #0d9488;
+        font-weight: 600;
+        border-bottom: 2px solid #0d9488;
+      }
+      .service-tab.active {
+        border-color: #0d9488;
+        color: #0d9488;
+        background-color: #f0fdfa;
+      }
+      .project-filter.active {
+        background-color: #0d9488;
+        color: white;
+      }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="sticky top-0 z-50 bg-white shadow-md w-full">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
+            <div class="flex-shrink-0">
+                <a href="#home" class="text-2xl font-bold text-teal-700">
+                    DELGLOBE
+                </a>
+            </div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#home" data-section="home" class="nav-link text-gray-600 hover:text-teal-600 py-2 transition duration-300 ease-in-out">Home</a>
+                <a href="#services" data-section="services" class="nav-link text-gray-600 hover:text-teal-600 py-2 transition duration-300 ease-in-out">Services</a>
+                <a href="#approach" data-section="approach" class="nav-link text-gray-600 hover:text-teal-600 py-2 transition duration-300 ease-in-out">Our Approach</a>
+                <a href="#work" data-section="work" class="nav-link text-gray-600 hover:text-teal-600 py-2 transition duration-300 ease-in-out">Our Work</a>
+                <a href="#contact" data-section="contact" class="nav-link text-gray-600 hover:text-teal-600 py-2 transition duration-300 ease-in-out">Contact</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-700 focus:outline-none">
+                    <span class="w-6 h-0.5 bg-gray-700 block my-1"></span>
+                    <span class="w-6 h-0.5 bg-gray-700 block my-1"></span>
+                    <span class="w-6 h-0.5 bg-gray-700 block my-1"></span>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="md:hidden hidden bg-white shadow-lg absolute top-full left-0 w-full">
+            <a href="#home" data-section="home" class="block nav-link text-gray-700 hover:bg-gray-100 px-6 py-3">Home</a>
+            <a href="#services" data-section="services" class="block nav-link text-gray-700 hover:bg-gray-100 px-6 py-3">Services</a>
+            <a href="#approach" data-section="approach" class="block nav-link text-gray-700 hover:bg-gray-100 px-6 py-3">Our Approach</a>
+            <a href="#work" data-section="work" class="block nav-link text-gray-700 hover:bg-gray-100 px-6 py-3">Our Work</a>
+            <a href="#contact" data-section="contact" class="block nav-link text-gray-700 hover:bg-gray-100 px-6 py-3">Contact</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="min-h-[calc(100vh-68px)] flex items-center bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-teal-700 tracking-tight">
+                    Spatial Intelligence.
+                </h1>
+                <h2 class="text-3xl md:text-5xl font-bold text-gray-800 mt-2">
+                    Real-World Impact.
+                </h2>
+                <p class="mt-8 text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+                    Welcome to <span class="font-semibold text-gray-900">Delglobe Consultants Limited</span>, a premier Kenyan firm specializing in the intersection of geospatial intelligence and strategic development. We are <span class="font-semibold text-teal-600">Spatial Problem Solvers</span>, transforming complex data into actionable insights that drive high-performance business outcomes and sustainable growth.
+                </p>
+                <div class="mt-12">
+                    <a href="#services" class="px-8 py-3 bg-teal-600 text-white text-lg font-medium rounded-lg shadow-md hover:bg-teal-700 transition duration-300 ease-in-out">
+                        Explore Our Services
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="py-24 bg-gray-50">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-base font-semibold text-teal-600 tracking-wide uppercase">Core Capabilities</h2>
+                    <h3 class="mt-2 text-3xl md:text-4xl font-extrabold text-gray-900">Mapping the Future</h3>
+                    <p class="mt-4 text-lg text-gray-600">
+                        We provide a holistic array of Geospatial and planning services designed to support every phase of infrastructure, development, and environmental management. Explore our main areas of operation below.
+                    </p>
+                </div>
+
+                <div class="mt-16">
+                    <div class="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-2 md:space-x-4 mb-8" role="tablist">
+                        <button class="service-tab active px-6 py-3 font-medium rounded-lg border-2 border-transparent hover:border-teal-500 transition duration-300" data-tab="geo" role="tab" aria-selected="true">
+                            Geoinformation & Mapping
+                        </button>
+                        <button class="service-tab px-6 py-3 font-medium rounded-lg border-2 border-transparent hover:border-teal-500 transition duration-300" data-tab="survey" role="tab" aria-selected="false">
+                            Surveying & Engineering
+                        </button>
+                        <button class="service-tab px-6 py-3 font-medium rounded-lg border-2 border-transparent hover:border-teal-500 transition duration-300" data-tab="training" role="tab" aria-selected="false">
+                            Training & Capacity
+                        </button>
+                    </div>
+
+                    <div class="bg-white p-8 md:p-12 rounded-xl shadow-xl max-w-4xl mx-auto">
+                        <div id="geo-content" class="service-content" role="tabpanel">
+                            <h4 class="text-2xl font-bold text-gray-900 mb-6">Geoinformation & Mapping Services</h4>
+                            <ul class="space-y-4 text-gray-700 text-base md:text-lg">
+                                <li class="flex items-start"><span class="text-teal-500 font-bold mr-3 mt-1">✓</span><span><strong class="text-gray-800">Web Mapping Applications:</strong> Custom applications using Google and Esri APIs.</span></li>
+                                <li class="flex items-start"><span class="text-teal-500 font-bold mr-3 mt-1">✓</span><span><strong class="text-gray-800">3D/Drone Mapping:</strong> Interactive 3D models (DEMs & DSMs) using Drones, GIS, and SketchUp.</span></li>
+                                <li class="flex items-start"><span class="text-teal-500 font-bold mr-3 mt-1">✓</span><span><strong class="text-gray-800">Map Production:</strong> High-quality digital maps for websites, publications, and promotional use.</span></li>
+                                <li class="flex items-start"><span class="text-teal-500 font-bold mr-3 mt-1">✓</span><span><strong class="text-gray-800">Enterprise GIS Services:</strong> Software installation, configuration, geo-database development, and portal creation.</span></li>
+                                <li class="flex items-start"><span class="text-teal-500 font-bold mr-3 mt-1">✓</span><span><strong class="text-gray-800">Project Planning & Management:</strong> Strategic planning and user needs assessment for GIS implementation.</span></li>
+                                <li class="flex items-start"><span class="text-teal-500 font-bold mr-3 mt-1">✓</span><span><strong class="text-gray-800">GIS Data Capture:</strong> Extracting insights from high-resolution satellite imagery for planning and resource mapping.</span></li>
+                            </ul>
+                        </div>
+                        <div id="survey-content" class="service-content hidden" role="tabpanel">
+                            <h4 class="text-2xl font-bold text-gray-900 mb-6">Topo, Engineering & Land Surveying</h4>
+                            <ul class="space-y-4 text-gray-700 text-base md:text-lg">
+                                <li class="flex items-start"><span class="text-teal-500 font-bold mr-3 mt-1">✓</span><span><strong class="text-gray-800">Survey Control:</strong> Establishment of control points and coordinate system transformation.</span></li>
+                                <li class="flex items-start"><span class="text-teal-500 font-bold mr-3 mt-1">✓</span><span><strong class="text-gray-800">Field Data Capture:</strong> Utilizing modern GNSS, total stations, digital levels, and drones/UAVs.</span></li>
+                                <li class="flex items-start"><span class="text-teal-500 font-bold mr-3 mt-1">✓</span><span><strong class="text-gray-800">Topographical & Engineering Survey:</strong> Consultancy for roads, water networks, buildings, and dam construction.</span></li>
+                                <li class="flex items-start"><span class="text-teal-500 font-bold mr-3 mt-1">✓</span><span><strong class="text-gray-800">Land Information Systems (LIS):</strong> Development using ArcGIS, GeoServer, and web solutions.</span></li>
+                                <li class="flex items-start"><span class="text-teal-500 font-bold mr-3 mt-1">✓</span><span><strong class="text-gray-800">Land Surveying:</strong> Mutation, title, cadastral, and sectional properties surveys (3D surveys).</span></li>
+                            </ul>
+                        </div>
+                        <div id="training-content" class="service-content hidden" role="tabpanel">
+                            <h4 class="text-2xl font-bold text-gray-900 mb-6">Geoinformation Training & Capacity Development</h4>
+                            <p class="text-gray-700 text-base md:text-lg">
+                                The development of human resources is arguably the single most important success factor for any organization. Training is essential as it enables staff to get acquainted with relevant modern Geospatial skills.
+                            </p>
+                            <p class="mt-4 text-gray-700 text-base md:text-lg">
+                                At Delglobe, we strongly believe that our wide range of GIS training will meet your needs in handling Geoinformation projects and assignments at any time, building capacity and empowering your team for long-term success.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="approach" class="py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-base font-semibold text-teal-600 tracking-wide uppercase">The Delglobe Difference</h2>
+                    <h3 class="mt-2 text-3xl md:text-4xl font-extrabold text-gray-900">Why Partner With Us?</h3>
+                    <p class="mt-4 text-lg text-gray-600">
+                        We are committed to building long-term, trust-based partnerships. Our differentiation is rooted in a culture that values innovation, collaboration, and a relentless focus on creating tangible value for our clients.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
+                    <div class="bg-gray-50 p-8 rounded-xl shadow-lg transform hover:scale-105 transition duration-300">
+                        <span class="text-5xl" role="img" aria-label="light bulb">💡</span>
+                        <h4 class="mt-4 text-xl font-bold text-gray-900">Intellectual Relentlessness</h4>
+                        <p class="mt-2 text-gray-600">We are constantly thinking, inventing new ideas, learning, and solving problems, deploying state-of-the-art technologies for your project.</p>
+                    </div>
+                    <div class="bg-gray-50 p-8 rounded-xl shadow-lg transform hover:scale-105 transition duration-300">
+                        <span class="text-5xl" role="img" aria-label="target">🎯</span>
+                        <h4 class="mt-4 text-xl font-bold text-gray-900">Value Creation Focus</h4>
+                        <p class="mt-2 text-gray-600">Our projects are defined by business outcomes, not just deliverables. We focus on reliable solutions that support critical decision-making.</p>
+                    </div>
+                    <div class="bg-gray-50 p-8 rounded-xl shadow-lg transform hover:scale-105 transition duration-300">
+                        <span class="text-5xl" role="img" aria-label="handshake">🤝</span>
+                        <h4 class="mt-4 text-xl font-bold text-gray-900">Trust & Accountability</h4>
+                        <p class="mt-2 text-gray-600">We adhere to the highest standards of honesty and integrity, ensuring accountability to ourselves and our clients at every stage.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="work" class="py-24 bg-gray-50">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-base font-semibold text-teal-600 tracking-wide uppercase">Proven Success</h2>
+                    <h3 class="mt-2 text-3xl md:text-4xl font-extrabold text-gray-900">Our Work in Action</h3>
+                    <p class="mt-4 text-lg text-gray-600">
+                        Our competency is validated through our work with key public sector partners on critical land and infrastructure projects. Explore our sample projects and client distribution below.
+                    </p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-12 items-center mt-16">
+                    <div class="bg-white p-8 rounded-xl shadow-xl">
+                        <h4 class="text-xl md:text-2xl font-bold text-gray-900 text-center mb-6">Client Project Distribution</h4>
+                        <div class="chart-container">
+                            <canvas id="clientChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-xl">
+                        <h4 class="text-xl md:text-2xl font-bold text-gray-900 mb-6">Sample Projects</h4>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <button class="project-filter active px-4 py-2 text-sm font-medium rounded-full border border-gray-300 hover:bg-gray-100 transition duration-300" data-filter="all">All</button>
+                            <button class="project-filter px-4 py-2 text-sm font-medium rounded-full border border-gray-300 hover:bg-gray-100 transition duration-300" data-filter="government">Government</button>
+                            <button class="project-filter px-4 py-2 text-sm font-medium rounded-full border border-gray-300 hover:bg-gray-100 transition duration-300" data-filter="education">Education</button>
+                        </div>
+                        <div id="project-list" class="space-y-4 max-h-96 overflow-y-auto pr-2">
+                            <div class="project-item p-4 bg-gray-50 rounded-lg border border-gray-200" data-category="government">
+                                <p class="font-semibold text-gray-800">Consultancy for Registration of Kisii Cancer Centre Land</p>
+                                <span class="text-sm font-medium text-blue-800 bg-blue-100 px-2 py-0.5 rounded-full">Kisii County Government</span>
+                            </div>
+                            <div class="project-item p-4 bg-gray-50 rounded-lg border border-gray-200" data-category="government">
+                                <p class="font-semibold text-gray-800">Cadastral Survey for Registration of Kisii County Fisheries Land</p>
+                                <span class="text-sm font-medium text-blue-800 bg-blue-100 px-2 py-0.5 rounded-full">Kisii County Government</span>
+                            </div>
+                            <div class="project-item p-4 bg-gray-50 rounded-lg border border-gray-200" data-category="education">
+                                <p class="font-semibold text-gray-800">Consultancy for Registration of Kenyatta University Land, Ruiru Campus</p>
+                                <span class="text-sm font-medium text-green-800 bg-green-100 px-2 py-0.5 rounded-full">Kenyatta University</span>
+                            </div>
+                            <div class="project-item p-4 bg-gray-50 rounded-lg border border-gray-200" data-category="government">
+                                <p class="font-semibold text-gray-800">Cadastral Survey for Registration of Kisii County Veterinary Land</p>
+                                <span class="text-sm font-medium text-blue-800 bg-blue-100 px-2 py-0.5 rounded-full">Kisii County Government</span>
+                            </div>
+                            <div class="project-item p-4 bg-gray-50 rounded-lg border border-gray-200" data-category="government">
+                                <p class="font-semibold text-gray-800">Supply of Land Survey & Mapping Equipment (RTK-Enabled Satellite Receiver)</p>
+                                <span class="text-sm font-medium text-blue-800 bg-blue-100 px-2 py-0.5 rounded-full">Kisii County Government</span>
+                            </div>
+                            <div class="project-item p-4 bg-gray-50 rounded-lg border border-gray-200" data-category="government">
+                                <p class="font-semibold text-gray-800">Supply of GIS & Land Survey Field Data Collection Equipment</p>
+                                <span class="text-sm font-medium text-blue-800 bg-blue-100 px-2 py-0.5 rounded-full">Kisii County Government</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="mission" class="py-20 bg-teal-700 text-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center grid md:grid-cols-2 gap-12">
+                <div class="max-w-xl mx-auto">
+                    <h3 class="text-3xl font-bold mb-4">Our Vision</h3>
+                    <p class="text-xl text-teal-100">
+                        To be the leading company of choice in the dispensation of cutting-edge Geospatial services and solutions in Kenya and the Africa region at large.
+                    </p>
+                </div>
+                <div class="max-w-xl mx-auto">
+                    <h3 class="text-3xl font-bold mb-4">Our Mission</h3>
+                    <p class="text-xl text-teal-100">
+                        To create, demonstrate and deliver geospatial technologies and solutions for long-lasting profitable partnerships, through innovation, synergy and by delivering reliable Geo-technology products.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-24 bg-gray-800 text-gray-200">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-white">Get In Touch</h2>
+                    <p class="mt-4 text-lg text-gray-300">
+                        Ready to transform your spatial data into strategic intelligence? Let’s map your next successful project. Contact us today to start the conversation.
+                    </p>
+                </div>
+
+                <div class="max-w-4xl mx-auto mt-16 grid sm:grid-cols-2 gap-8 text-lg">
+                    <div class="bg-gray-700 p-8 rounded-lg">
+                        <h4 class="text-xl font-semibold text-white mb-2">Physical Address</h4>
+                        <p>The Place Building, 3rd Floor</p>
+                        <p>Kisii-Kisumu Road</p>
+                    </div>
+                    <div class="bg-gray-700 p-8 rounded-lg">
+                        <h4 class="text-xl font-semibold text-white mb-2">Contact Details</h4>
+                        <p><strong class="text-gray-300">Postal:</strong> 2580-40200 KISII</p>
+                        <p class="mt-2"><strong class="text-gray-300">Phone:</strong> +254 703 337 559</p>
+                        <p class="mt-2"><strong class="text-gray-300">Email:</strong> dglobeserviceske@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-900 text-gray-400 py-8">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Delglobe Consultants Limited. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const serviceTabs = document.querySelectorAll('.service-tab');
+            const serviceContents = document.querySelectorAll('.service-content');
+
+            serviceTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const target = tab.dataset.tab;
+
+                    serviceTabs.forEach(t => t.classList.remove('active', 'aria-selected="true"'));
+                    tab.classList.add('active', 'aria-selected="true"');
+
+                    serviceContents.forEach(content => {
+                        if (content.id === `${target}-content`) {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            const projectFilters = document.querySelectorAll('.project-filter');
+            const projectItems = document.querySelectorAll('.project-item');
+
+            projectFilters.forEach(filter => {
+                filter.addEventListener('click', () => {
+                    const targetFilter = filter.dataset.filter;
+
+                    projectFilters.forEach(f => f.classList.remove('active'));
+                    filter.classList.add('active');
+
+                    projectItems.forEach(item => {
+                        const itemCategory = item.dataset.category;
+                        if (targetFilter === 'all' || itemCategory === targetFilter) {
+                            item.classList.remove('hidden');
+                        } else {
+                            item.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            const clientChartCtx = document.getElementById('clientChart').getContext('2d');
+            new Chart(clientChartCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Kisii County Government', 'Kenyatta University'],
+                    datasets: [{
+                        label: 'Projects',
+                        data: [5, 1],
+                        backgroundColor: [
+                            '#0d9488',
+                            '#fde047'
+                        ],
+                        borderColor: [
+                            '#ffffff',
+                            '#ffffff'
+                        ],
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#374151',
+                                font: {
+                                    size: 14,
+                                    family: 'Inter, sans-serif'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (link.closest('#mobile-menu')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                    if (link.getAttribute('href').startsWith('#')) {
+                        e.preventDefault();
+                        const targetId = link.getAttribute('href');
+                        document.querySelector(targetId).scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.4
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const sectionId = entry.target.id;
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${sectionId}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
